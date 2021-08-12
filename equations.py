@@ -17,31 +17,29 @@ class Equation(object):
 
     def __init__(self,config):
         self.config = config
-        self.range = config.eqn_config.range
+        self.range = config.Numerical_settings.range
         """param=[mu, gamma, r ,lmb ,sgm, rho]"""
-        self.param = config.eqn_config.param
-        # self.param_alt = config.eqn_config.param_alt
+        self.param = list(config.Parameters.values())
         self.y_init = 0
         self.Gamma = self.Gamma_order()
         """Parameters for the solver"""
-        self.N = self.config.ode_config.N
+        self.N = config.Numerical_settings.Number_of_points
         self.dx = self.range/self.N
         self.x = np.linspace(0,self.range,self.N)
         self.y = np.empty(self.N)
         self.line = [(self.param[0] - self.param[1] * x)/self.param[2] for x in self.x]
         self.dy = np.empty(self.N)
         self.ddy = np.empty(self.N)
-        self.Upper_dy_lim = config.ode_config.Upper_dy_lim
-        self.Lower_dy_lim = config.ode_config.Lower_dy_lim
-        self.it = config.ode_config.num_iterations
-        self.eps = config.ode_config.eps
-        self.N = config.ode_config.N
-        self.df0 = config.ode_config.df0
+        self.Upper_dy_lim = config.Numerical_settings.Upper_dy_lim
+        self.Lower_dy_lim = config.Numerical_settings.Lower_dy_lim
+        self.it = config.Numerical_settings.num_iterations
+        self.eps = config.Numerical_settings.Stop_criterion_for_F_ODE
+        self.df0 = config.Numerical_settings.df0
         self.y = np.empty(self.N)
         self.dy = np.empty(self.N)
         self.ddy = np.empty(self.N)
-        self.num_paths =  config.bvp_config.num_paths
-        self.max_length = config.bvp_config.max_length
+        self.num_paths =  config.Simulation_settings.num_paths
+        self.max_length = config.Simulation_settings.max_length
         self.num_samples =  self.num_paths*self.max_length
 
 
@@ -273,53 +271,6 @@ class eqn_FfS(eqn_Ff):
             j = self.findD(np.abs(self.mS - self.m[i]))
             self.ddS[j[0]] = np.nan
             self.ddS[j[0]+1] = np.nan
-
-
-    # def sample(self,x):
-    #     self.Dlt_B = np.random.normal(0, self.dx, size=(self.num_samples))
-    #     dt = self.dx*self.dx
-    #     i = 0
-    #     self.paths = []
-    #     for j in range(0,self.num_paths):
-    #         path_ = [np.random.uniform(0,x_p,1)[0]]
-    #         while ((i < self.max_length) & (path_[-1] > 0)):
-    #             tmp = np.amin([x_p, path_[-1] + Dlt_B[i]])
-    #             path_.append(tmp)
-    #             i = i + 1
-    #             if (path_[-1] < 0):
-    #                 path_[-1] = 0
-    #                 self.paths.append(path_)
-    #     self.input = np.array([p[0] for p in self.paths.reshape(-1, 1)
-
-    # def base(x,y,x_input,K):
-    #     I = []
-    #     y_output = []
-    #     a = np.empty(K)
-    #     b = np.empty(K)
-    #     X_ind = np.empty(K)
-    #     X = np.empty(K)
-    #     X_sq = np.empty(K)
-    #     Y = np.empty(K)
-    #     YX = np.empty(K)
-    #     x_y = np.stack((x,y.reshape(-1,1)),axis=1)
-    #     for x0 in x_input:
-    #         for i in range(1,K):
-    #             if ((x0 > (i-1)*x_p/K) & (x0 <= i*x_p/K)):
-    #                 I = i
-    #         X_ind = np.sum([1 if ((z[0] > (I-1)*x_p/K) & (z[0] <= I*x_p/K)) else 0 for z in x_y])
-    #         X = np.sum([z[0] if ((z[0] > (I-1)*x_p/K) & (z[0] <= I*x_p/K)) else 0 for z in x_y])
-    #         X_sq = np.sum([z[0]*z[0] if ((z[0] > (I-1)*x_p/K) & (z[0] <= I*x_p/K)) else 0 for z in x_y])
-    #         Y = np.sum([z[1] if ((z[0] > (I-1)*x_p/K) & (z[0] <= I*x_p/K)) else 0 for z in x_y])
-    #         YX = np.sum([z[1]*z[0] if ((z[0] > (I-1)*x_p/K) & (z[0] <= I*x_p/K)) else 0 for z in x_y])
-    #         det = X_sq*X_ind-X*X
-    #         a = (X_ind*YX-X*Y)/det
-    #         b = (-X*YX+X_sq*Y)/det
-    #         y_output.append(np.multiply(a,x0) + b)
-    #     return y_output
-    #
-    #
-
-
 
 
 

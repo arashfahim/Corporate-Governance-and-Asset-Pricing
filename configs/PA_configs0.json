@@ -1,0 +1,32 @@
+{
+ "Parameters": {
+  "\u03bc:": 3.0,
+  "\u03b3:": 2.1,
+  "r:": 1,
+  "\u03bb": 0.5,
+  "\u03c3:": [
+   3.0,
+   2.0,
+   0.1
+  ],
+  "\u03c1:": [
+   0.0,
+   1.0,
+   3.0
+  ]
+ },
+ "Numerical_settings": {
+  "range": 1.7,
+  "Number_of_points": 500,
+  "df0": 4,
+  "Stop_criterion_for_F_ODE": 0.008,
+  "Upper_dy_lim": 80,
+  "Lower_dy_lim": 0.1,
+  "num_iterations": 1000
+ },
+ "Simulation_settings": {
+  "num_paths": 100,
+  "max_length": 500
+ },
+ "color": "red"
+}
