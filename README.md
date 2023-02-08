@@ -6,4 +6,4 @@ where $dX_t=\gamma X_t -dP_t + \theta_{I_t}dB_t$, $P_t$ is a singular control pr
 a finite set $\{1,...,N\}. There are $N$ possible values for the pair $(\theta_i,\rho_i)$ which are ordered by $0<\theta_1<\cdots<\theta_N$
 $\mu>\rho_1>\cdots>\rho_N=0$.
 The code solved the variational HJB
-$0=\min\{\inf_i\{-\frac{\theta^2_i}{2}V''-\rho_i\}-\gamma x V' + r V - \mu, V' + 1\}$
+$0=\min\Big(\inf_i\{-\frac{\theta^2_i}{2}V''-\rho_i\}-\gamma x V' + r V - \mu, V' + 1\Big)$
