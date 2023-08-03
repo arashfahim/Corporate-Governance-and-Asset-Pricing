@@ -8,6 +8,7 @@ import equations as eqn
 
 
 
+
 class ParamEntry(object):
     """"Base class for the user interface"""
     def __init__(self):
@@ -15,21 +16,23 @@ class ParamEntry(object):
         self.i = 0
         self.color = ['red', 'green', 'blue', 'yellow', 'purple', 'orange']
         self.params_dict = {
-            "\u03BC:": '3.0', #mu
-            "\u03B3:": '2.1', #gamma
-            "\u0072:": '1',
-            "\u03BB": '0.5',
-            "\u03C3:": r'[3.0, 2.0, 0.1]', #sigma
-            "\u03C1:": r'[0.0, 1.0, 3.0]' #rho
+            "\u03BC:": '1.2', #mu
+            "\u03B3:": '4.0', #gamma
+            "\u0072:": '3.0', #r
+            "\u03BB": '0.5', #lambda
+            "\u03C3:": r'[0.4, 0.2, 0.1]', #sigma
+            "\u03C1:": r'[0.0, 0.5, 1.0]' #rho
         }
+        self.entry_width = int(len(self.params_dict["\u03C3:"])/5*3.5)
+        # print(self.entry_width)
         self.num_dict  = {
-            "range": "1.7",
-            "Number_of_points": "500",
-            "df0": "4",
-            "Stop_criterion_for_F_ODE": "0.008",
-            "Upper_dy_lim": "80",
+            "range": "1.0",
+            "Number_of_points": "2000",
+            "df0": "5",
+            "Stop_criterion_for_F_ODE": "0.001",
+            "Upper_dy_lim": "1000",
             "Lower_dy_lim": "0.1",
-            "num_iterations": "1000"
+            "num_iterations": "200"
         }
         self.sim_dict = {
             "num_paths": "100",
@@ -38,22 +41,22 @@ class ParamEntry(object):
         self.dict ={
             "Parameters" : self.params_dict,
             "Numerical_settings" : self.num_dict,
-            "Simulation_settings" : self.sim_dict,
+            # "Simulation_settings" : self.sim_dict,#add if simulatioins added to the
             "color": "red"
         }
         self.frame_list = []
         self.dict_list = []
         self.j = 0
         self.lbl_y = 5
-        self.range = 1.7
-        self.df0 = 4
-        self.Upper_dy_lim = 80
-        self.Lower_dy_lim = 0.1
-        self.num_iterations = 1000
-        self.eps = 0.008
-        self.N = 500
-        self.num_paths = 100
-        self.max_length = 500
+        # self.range = 1.7
+        # self.df0 = 4
+        # self.Upper_dy_lim = 80
+        # self.Lower_dy_lim = 0.1
+        # self.num_iterations = 1000
+        # self.eps = 0.008
+        # self.N = 500
+        # self.num_paths = 100
+        # self.max_length = 500
 
     def center(self):
         w = self.window.winfo_reqwidth()
@@ -65,7 +68,7 @@ class ParamEntry(object):
         self.window.geometry('+%d+%d' % (x, y))
 
 
-
+    '''creates table of parameters'''
     def dict_2_table(self,dict,string):
         lbl = tk.Label(
             master = self.tmp_box
@@ -89,7 +92,7 @@ class ParamEntry(object):
                     text=name,
                     bg="gray",
                     anchor="w",
-                    width=30,
+                    width=22,
                     font=("Arial", 14)
                 )
             lbl.grid(row = self.i, column = 0, padx=1, sticky="W")
@@ -101,7 +104,7 @@ class ParamEntry(object):
                     bg="black",
                     fg = "white",
                     insertbackground='white',
-                    width = 10,
+                    width = self.entry_width,
                     font=("Arial", 14)
                 )
             entry.insert("0",val)
@@ -167,9 +170,10 @@ class ParamEntry(object):
         )
         self.tmp_box.grid(row = self.i, column = self.j, sticky="W")
         self.frame_list.append(self.tmp_box)
-        for j in range(0,3):
+        for j in range(0,len(self.dict)-1):
             string = list(self.dict.keys())[j]
             dict = self.dict[string]
+            # print(dict)
             self.dict_2_table(dict,string)
         self.i = 0
 
@@ -194,12 +198,12 @@ class ParamEntry(object):
             num_dict  = {
                 list(self.num_dict.keys())[i]: ast.literal_eval(tmp_list[i+6]) for i in list(range(0,7))
             }
-            sim_dict = {
-                list(self.sim_dict.keys())[i]: ast.literal_eval(tmp_list[i+13]) for i in list(range(0,2))
-            }
-            tmp_list = [params_dict, num_dict, sim_dict]
+            # sim_dict = {
+            #     list(self.sim_dict.keys())[i]: ast.literal_eval(tmp_list[i+13]) for i in list(range(0,2))
+            # }#no simulation exists in the code we add when a simulation is necessary , sim_dict
+            tmp_list = [params_dict, num_dict]#no simulation exists in the code we add when a simulation is necessary , sim_dict
             tmp_dict = {
-                list(tmp_dict.keys())[i]: tmp_list[i] for i in range(0,3)
+                list(tmp_dict.keys())[i]: tmp_list[i] for i in range(0,len(tmp_list))
             }
             tmp_dict["color"] = frame["background"]
             self.dict_list.append(tmp_dict)

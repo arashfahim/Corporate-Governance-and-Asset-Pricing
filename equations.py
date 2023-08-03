@@ -35,12 +35,13 @@ class Equation(object):
         self.it = config.Numerical_settings.num_iterations
         self.eps = config.Numerical_settings.Stop_criterion_for_F_ODE
         self.df0 = config.Numerical_settings.df0
-        self.y = np.empty(self.N)
-        self.dy = np.empty(self.N)
-        self.ddy = np.empty(self.N)
-        self.num_paths =  config.Simulation_settings.num_paths
-        self.max_length = config.Simulation_settings.max_length
-        self.num_samples =  self.num_paths*self.max_length
+        # self.y = np.empty(self.N)
+        # self.dy = np.empty(self.N)
+        # self.ddy = np.empty(self.N)
+        # self.num_paths =  config.Simulation_settings.num_paths
+        # self.max_length = config.Simulation_settings.max_length
+        # self.num_samples =  self.num_paths*self.max_length
+        self.solver_tag = True
 
 
 
@@ -101,7 +102,7 @@ class eqn_Ff(Equation):
         for index, i in enumerate(Gamma):
                 _sgm_.append(sgm_[Gamma[index][2]])
                 _rho_.append(rho_[Gamma[index][2]])
-                self.swtch.append(Gamma[index][0])#/(self.param[3]*self.param[3]))
+                self.swtch.append(Gamma[index][0])#holds the values of ddF where switching happends
                 print(Gamma[index][1], ' to ', Gamma[index][2], ' at Gamma_',index+1,' = ', round(Gamma[index][0],3),' \n')
         # _sgm_.reverse()
         self.param[4] = _sgm_
@@ -121,11 +122,14 @@ class eqn_Ff(Equation):
         return H_inv
 
 
-    def optimal_sigma(self,t):
+    def optimal(self,t):#def optimal_sigma_rho(self,t):
         sgm_ = self.param[4]
+        rho_ = self.param[5]
         y = np.ones(len(t))
+        z = np.ones(len(t))
         if len(sgm_) == 1:
             y = y * sgm_[0]
+            z = z * rho_[0]
         else:
             temp_swtch = [0]
             temp_swtch.extend(self.swtch)
@@ -134,13 +138,14 @@ class eqn_Ff(Equation):
                 #solver of BVP: scipy.integrate.solve_bvp requires
                 #this to work for t of any size. This is the reason
                 #behind the loop.
-                i__ = self.findD(np.abs(t[indexm]-self.m))
+                i__ = self.findD(np.abs(i-self.m))#closest point on the frid to t
                 y[indexm] = self.ddf[i__[0]]
+                z[indexm] = self.ddf[i__[0]]
             for index, g in enumerate(temp_swtch[0:-1]):
                 y = np.where((y <= g) & (y > temp_swtch[index+1]), sgm_[index], y)
-        return y
-
-
+                z = np.where((z <= g) & (z > temp_swtch[index+1]), rho_[index], z)
+        return y,z
+    
 
     def bvp_solve(self):
         def RHS(X, t, param):
@@ -196,26 +201,31 @@ np.absolute(self.y[self.__w__[0]]-self.line[self.__w__[0]])
 
 
 
+
         __x_s__ = findMin(np.absolute(self.dy))
-        self.x_s = self.x[__x_s__[0]]
-        print(self.__w__[0]+1)
-        self.x_p = self.x[self.__w__[0]+1]
-        self.m = self.x/self.param[3]
+        self.x_s = self.x[__x_s__[0]]#switching points
+        ind = np.min([int((self.__w__[0]+1)*1.2),self.N])
+        self.x = self.x[0:ind]
+        # print(self.__w__[0]+1)
+        self.x_p = self.x[self.__w__[0]+1]#payment point
+        self.m = self.x/self.param[3]# cash reserve variable
+        self.mS = self.m[0:(self.__w__[0]+1)]# cash reserve variable
 
-        self.y = np.where(self.ddy <= 0, self.y, self.y[self.__w__[0]]-(self.x - self.x_p))
-        self.dy = np.where(self.ddy <= 0, self.dy, -1)
-        self.ddy = np.where(self.ddy <= 0, self.ddy, 0)
+        self.y = np.where(self.ddy[0:ind] <= 0, self.y[0:ind], self.y[self.__w__[0]]-(self.x - self.x_p))
+        self.dy = np.where(self.ddy[0:ind] <= 0, self.dy[0:ind], -1)
+        self.ddy = np.where(self.ddy[0:ind] <= 0, self.ddy[0:ind], 0)
+        self.line = self.line[0:ind]
 
 
 
-        self.m_s = self.x_s/self.param[3]
-        self.m_p = self.x_p/self.param[3]
+        self.m_s = self.x_s/self.param[3]#switching points in cash reserve variable m
+        self.m_p = self.x_p/self.param[3]#payment point in cash reserve variable m
         self.f = self.y
         self.df = self.dy*self.param[3]
         self.ddf = self.ddy*self.param[3]*self.param[3]
         self.fline = [(self.param[0] - self.param[1] * self.param[3] * x)/self.param[2] for x in self.m]
         self.sol= {'domain':self.x, 'solution':self.y,'1st_deriv':self.dy,'2nd_deriv':self.dy,'3rd_deriv':self.ddy,'pay_point':self.x_p, 'negot_point':self.x_s}
-        opt_sig = self.optimal_sigma(self.m)
+        opt_sig, opt_rho = self.optimal(self.m)
         self.swtch_pos = np.where(np.abs(np.diff(opt_sig)) > 0)[0]
         swtch = [str(round(self.m[I],2)) for I in self.swtch_pos]
         swtch_ = 'The switching point(s) are given by '+ ', '.join(swtch)
@@ -236,6 +246,7 @@ Minimum of abs(F-(mu-gamma*x)/r,  Minimum of abs(dF+1), and Minimum of abs(ddF) 
 +str(round(self.m_p,5))+'. ' + '\n'\
 +swtch_+'.'
 
+        self.solver_tag = False
         ####################
 
 
@@ -248,14 +259,14 @@ class eqn_FfS(eqn_Ff):
 
 
     def bvp_S(self):
-        self.solver()
-        def eqn_form(t, X):
-            dis_cnt_coeff = 2/(self.optimal_sigma(t)*self.optimal_sigma(t))
+        def eqn_form(t, X):# defining equation for S
+            opt_sig, opt_rho = self.optimal(t)
+            dis_cnt_coeff = 2/(opt_sig*opt_sig)
             H_ = np.vstack((X[1], dis_cnt_coeff*(self.param[2]*X[0] -self.param[1]*t * X[1])))
             return H_
-        def bc(ya, yb):
+        def bc(ya, yb):# defining boundary values for S
             return np.array([ya[0], yb[1]-1])
-        self.mS = self.x[0:(self.__w__[0]+1)]
+        
         init_y  = np.ones((2,len(self.mS)))
         init_y[0] = np.power(self.mS,4/5)
         a = dt.datetime.now()
@@ -264,16 +275,79 @@ class eqn_FfS(eqn_Ff):
         print('BVP for S is solved in',b.total_seconds(),'seconds.\n')
         self.S = solution.sol(self.mS)[0]
         self.dS = solution.sol(self.mS)[1]
-        dis_cnt_coeff = 2/(self.optimal_sigma(self.mS)*self.optimal_sigma(self.mS))
+        opt_sig, opt_rho = self.optimal(self.mS)
+        dis_cnt_coeff = 2/(opt_sig*opt_sig)
         self.ddS = (self.param[2] * self.S - self.param[1] * self.mS * self.dS)\
 *dis_cnt_coeff
         for i in self.swtch_pos:
-            j = self.findD(np.abs(self.mS - self.m[i]))
+            j = self.findD(np.abs(self.mS - self.mS[i]))
             self.ddS[j[0]] = np.nan
             self.ddS[j[0]+1] = np.nan
 
 
 
+    def bvp_T(self):
+        def eqn_form(t, X):# defining equation for T
+            opt_sig, opt_rho = self.optimal(t)
+            dis_cnt_coeff = 2/(opt_sig*opt_sig)
+            H_ = np.vstack((X[1], dis_cnt_coeff*(-1 + self.param[2]*X[0] -self.param[1]*t * X[1])))
+            return H_
+        def bc(ya, yb):# defining boundary values for T
+            return np.array([ya[0], yb[1]])
+
+        init_y  = np.ones((2,len(self.mS)))
+        init_y[0] = np.power(self.mS,4/5)
+        a = dt.datetime.now()
+        solution = solve_bvp(eqn_form, bc, self.mS, init_y)
+        b = dt.datetime.now() - a
+        print('BVP for T is solved in',b.total_seconds(),'seconds.\n')
+        self.T = solution.sol(self.mS)[0]
+        self.dT = solution.sol(self.mS)[1]
+        opt_sig , opt_rho = self.optimal(self.mS)
+        dis_cnt_coeff = 2/(opt_sig*opt_sig)
+        self.ddT = (-1 + self.param[2] * self.T - self.param[1] * self.mS * self.dT)\
+*dis_cnt_coeff
+        for i in self.swtch_pos:#setting value at place of jumps avoids ploting jumps as a continuous function
+            j = self.findD(np.abs(self.mS - self.mS[i]))
+            self.ddT[j[0]] = np.nan
+            self.ddT[j[0]+1] = np.nan
+
+    def bvp_C(self):
+        def eqn_form(t, X):# defining equation for T
+            opt_sig, opt_rho = self.optimal(t)
+            dis_cnt_coeff = 2/(opt_sig*opt_sig)
+            H_ = np.vstack((X[1], dis_cnt_coeff*(-opt_rho + self.param[2]*X[0] -self.param[1]*t * X[1])))
+            return H_
+        def bc(ya, yb):# defining boundary values for T
+            return np.array([ya[0], yb[1]])
+
+        init_y  = np.ones((2,len(self.mS)))
+        init_y[0] = np.power(self.mS,4/5)
+        a = dt.datetime.now()
+        solution = solve_bvp(eqn_form, bc, self.mS, init_y)
+        b = dt.datetime.now() - a
+        print('BVP for C is solved in',b.total_seconds(),'seconds.\n')
+        self.C = solution.sol(self.mS)[0]
+        self.dC = solution.sol(self.mS)[1]
+        opt_sig, opt_rho = self.optimal(self.mS) 
+        dis_cnt_coeff = 2/(opt_sig*opt_sig)
+        self.ddC = (- opt_rho + self.param[2] * self.C - self.param[1] * self.mS * self.dC)\
+*dis_cnt_coeff
+        for i in self.swtch_pos:#setting value at place of jumps avoids ploting jumps as a continuous function
+            j = self.findD(np.abs(self.mS - self.mS[i]))
+            self.ddC[j[0]] = np.nan
+            self.ddC[j[0]+1] = np.nan
+
+    def bvp(self):# solves both equations for T and S
+        if self.solver_tag:#if bvp solved tag is false
+            self.solver()
+        self.bvp_S()
+        self.bvp_T()
+        self.bvp_C()
+        # mf=self.f[0:(self.__w__[0]+1)]#f(m) in cash reserve range: until the payment point only
+        self.C1=self.param[0]*self.T-self.param[3]*self.S-self.f[0:(self.__w__[0]+1)]#monitoring cost obtained from the equality f(m)=\mu/r T(m) - \lambda*S(m)-monit_cost(m)
+        self.dC1=self.param[0]*self.dT-self.param[3]*self.dS-self.df[0:(self.__w__[0]+1)]
+        self.ddC1=self.param[0]*self.ddT-self.param[3]*self.ddS-self.ddf[0:(self.__w__[0]+1)]
 
 
 
