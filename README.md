@@ -5,7 +5,7 @@ This program aims to solve the singular control problem below
 $$\sup\mathbb{E}\Big[\int_0^\tau e^{-rt}\big(\mu-\rho_{I_t}-dP_t\big)+e^{-r\tau}X_\tau\Big]$$
 
 where $dX_t=\gamma X_t -dP_t + \theta_{I_t}dB_t$, and the supremum is over all nondecreasing adapted processes $P_t$, possibly singular, and all adapted processes $I_t$ taking values in a finite set $[N]:=\lbrace1,...,N\rbrace$. There are $N$ possible values for the pair $(\theta_i,\rho_i)$ which are ordered by $0<\theta_1<\cdots<\theta_N$
-$\mu>\rho_1>\cdots>\rho_N=0$. The loser the level of noise, $\theta_i$, is, the higher $\rho_i$. $\rho_i$ are considered a cost associated to level $i$.
+$\mu>\rho_1>\cdots>\rho_N=0$. The loser the level of noise, $\theta_i$, is, the higher $\rho_i$ is. $\rho_i$ are considered a cost associated to level $i$.
 
 This problem arises in the optimal case of the agency problem with monitoring in theoretical economics. The principal obseves te process $X$ and have freedom to choose $\theta_i$ for $i\in [N]$. The small $\theta_i$ is, the higher the level of monitoring is. While monitoring level $\theta_i$ is applied, the principal pays a running cost at rate $\rho_i$. In the problem $\theta_i=\lambda\sigma_i$, where $1-\lambda$ is a proportional  cost of stealing from the company by the agent. The higher $\lambda$ is, the lower the agent benefits from stealing.
 
