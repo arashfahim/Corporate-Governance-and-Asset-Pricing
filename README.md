@@ -26,6 +26,8 @@ U(0)= u_0
 
 where $H(\Gamma)=\inf_i\lbrace-\frac{\theta^2_i}{2}\Gamma-\rho_i\rbrace$. Then, we determine triplet $(x_0,x_1,x_2)$ such that $V(x_0)=\mu/r-\gamma/r x_0$, $U(x_1)+1=0$, and $U^{\prime}(x_2)=0$. By iterating over $u_0$, we converge towrad achieving $x_0=x_1=x_2$. Upon achieving this goal, $V$ is the solution to the variational  HJB and $U$ and $U^\prime$ are its first and second derivatives of $V$. 
 
+In each iteration of the code, the nonlinear system of ODEs is solved by ```from scipy import integrate``` .
+
 After finding $V$ and $V^{\prime\prime}$, the optimal contract is described as below: 
 
 1. Optimal monitoring strategy: $I(x)=argmin_i \lbrace -\frac{\theta^2_i}{2} V^{\prime\prime}(x)-\rho_i\rbrace $, and, therefore, $\theta(x)=\lambda\sigma_{I(x)}$ and  $\rho(x)=\rho_{I(x)}$
@@ -73,10 +75,30 @@ T^\prime(m_0)= 0
 
 The cost of monitoring is measured by 
 
-$$T(m)=\mathbb{E}\Big[\int_0^\tau e^{-rt} \rho(M_t) dt\Big]$$
+$$C(m)=\mathbb{E}\Big[\int_0^\tau e^{-rt} \rho(M_t) dt\Big]$$
+
+$$\begin{cases}
+-\frac{\sigma^2(m)}{2}C^{\prime\prime}-\gamma m C^{\prime} + r C -\rho(m)=0\\
+C(0)=0\\
+C^\prime(m_0)= 0
+\end{cases}$$
+
+
+## An identity
+
+While the program solves each of the above functions separately, it also passes the verification step that the identity below holds true.
+
+$$f(m)=\mu T(m) - C(m) -\lambda S(m)$$
+
+## Solving the boundary value problems for $S$, $T$, and $C$
+
+We use the package ```from scipy.integrate import solve_bvp``` to solve the ODEs above. Note that the ODEs are are linear but with   discontinuous coefficients.
+
 
 
 
 # How to run the program:
 
-To run the file, you need to run main.py. A UI window appears and you choose up to 6 sets of parameters. Then, you just close the UI window and the program runs to create some verbose and plots the solution and some other related plots.
+To run the file, you need to run main.py. A UI window appears and you choose up to 6 sets of parameters. Then, you must click on the 'Save Parameters' and close the UI window. Then, the program runs to solve the problems and show verbose at each step of the solution. Finally, it plots the solutions. Note that the  ```PA_plot.myfigures``` allows for ploting many combined functions such as $\lambda S(m)$, or $C(m)+\lambda S(m)$. 
+
+Finally, ```tikzplotlib``` yields tikz files that can be plotted in $\LaTeX$.
