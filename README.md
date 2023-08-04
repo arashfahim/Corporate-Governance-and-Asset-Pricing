@@ -26,17 +26,54 @@ U(0)= u_0
 
 where $H(\Gamma)=\inf_i\lbrace-\frac{\theta^2_i}{2}\Gamma-\rho_i\rbrace$. Then, we determine triplet $(x_0,x_1,x_2)$ such that $V(x_0)=\mu/r-\gamma/r x_0$, $U(x_1)+1=0$, and $U^{\prime}(x_2)=0$. By iterating over $u_0$, we converge towrad achieving $x_0=x_1=x_2$. Upon achieving this goal, $V$ is the solution to the variational  HJB and $U$ and $U^\prime$ are its first and second derivatives of $V$. 
 
-After finding $V$ and $V^{\prime\prime}$, the optimal contract is described as below: $I^*(x)=\text{argmin}_i\lbrace -\frac{\theta^2_i}{2} V^{\prime\prime}(x)-\rho_i \rbrace$, and therefore, 
+After finding $V$ and $V^{\prime\prime}$, the optimal contract is described as below: 
 
-
-$$\theta_{I^*(x)}$$
-
-and $\rho^*(x)=\rho_{I^*(x)}$
-$P_t$ is the local time of $dX^*_t=\gamma X^*_t -dP_t + \theta^*(X_t)dB_t$ at point $x_0$ where $V(x_0)=\mu/r-\gamma/r x_0$, $V^{\prime}(x_0)+1=0$, and $V^{\prime\prime}(x_0)=0$.
-
-
+1. Optimal monitoring strategy: $I(x)=argmin_i \lbrace -\frac{\theta^2_i}{2} V^{\prime\prime}(x)-\rho_i\rbrace $, and, therefore, $\theta(x)=\lambda\sigma_{I(x)}$ and  $\rho(x)=\rho_{I(x)}$
+2. Optimal payment: $P_t$ is the local time of $dX_t=\gamma X_t + \theta(X_t)dB_t$ at point $x_0$, described by $V(x_0)=\mu/r-\gamma/r x_0$, $V^{\prime}(x_0)+1=0$, and $V^{\prime\prime}(x_0)=0$.
 
 # Implementation of the contract
+To implement the contract, principal create a cash reserve given by $M_t=\frac{X_t}{\lambda}$ and transfers a $\lambda$ portion of ownership of the company to the agent by issuing a non-transferable security that pays dividend when $M_t$ hits  $m_0=\frac{x_0}{\lambda}$ at rate equal to the local time $\lambda^{-1}P_t$.
+
+The value of the principal as a function of $M_t$ is given by
+
+$$f(m):=\mathbb{E}\Big[\int_0^\tau e^{-rt}\big(\mu-\rho(M_t)-dP_t\big)\Big]$$
+
+where $\rho(m)=\rho(\lambda m)$, $\sigma(m)=\sigma(\lambda m)$, and $dM_t=\gamma M_t dt -\lambda^{-1}dP_t + \sigma(M_t)dB_t$
+
+## Price of the asset of the company
+
+The value of the security, issued by the principal is given by 
+
+$$S(m)=\lambda^{-1}\mathbb{E}\Big[\int_0^\tau e^{-rt} dP_t\Big]$$
+
+and satisfies the ODE
+
+$$\begin{cases}
+-\frac{\sigma^2(m)}{2}S^{\prime\prime}-\gamma m S^{\prime} + r S=0\\
+S(0)=0\\
+S^\prime(m_0)= 1
+\end{cases}$$
+
+## Credit worthiness of the company
+
+The credit worthiness of the company can be measured by 
+
+$$\mathbb{E}[e^{-r\tau} ]$$
+
+The function $T(m)=\mathbb{E}\Big[\int_0^\tau e^{-rt} dt\Big]=r^{-1}(1-\mathbb{E}[e^{-r\tau}])$, measurng survival of the company, satisfiess the ODE 
+
+$$\begin{cases}
+-\frac{\sigma^2(m)}{2}T^{\prime\prime}-\gamma m T^{\prime} + r T -1=0\\
+T(0)=0\\
+T^\prime(m_0)= 0
+\end{cases}$$
+
+
+## Monitoring cost
+
+The cost of monitoring is measured by 
+
+$$T(m)=\mathbb{E}\Big[\int_0^\tau e^{-rt} \rho(M_t) dt\Big]$$
 
 
 
