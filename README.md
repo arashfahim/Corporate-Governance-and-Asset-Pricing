@@ -11,7 +11,10 @@ The code first solves the variational HJB
 $0=\min\Big(\inf_i\lbrace-\frac{\theta^2_i}{2}V^{\prime\prime}-\rho_i\rbrace-\gamma x V^{\prime} + r V - \mu, V^{\prime} + 1\Big)$ by turing it into a systm of nonlinear ODEs.
 
 
-$$\begin{cases}U= V^{\prime}\\
-U^{\prime}= G(\gamma x V^{\prime} - r V + \mu)\end{cases}$$
+$$\begin{cases}
+U= V^{\prime}\\
+U^{\prime}= H^{-1}(\gamma x V^{\prime} - r V + \mu)
+\end{cases}$$
+where $H(\Gamma)=\inf_i\lbrace-\frac{\theta^2_i}{2}\Gamma-\rho_i\rbrace$ 
 
 To run the file, you need to run main.py. A UI window appears and you choose up to 6 sets of parameters. Then, you just close the UI window and the program runs to create some verbose and plots the solution and some other related plots.
