@@ -17,16 +17,16 @@ class ParamEntry(object):
         self.color = ['red', 'green', 'blue', 'yellow', 'purple', 'orange']
         self.params_dict = {
             "\u03BC:": '1.2', #mu
-            "\u03B3:": '4.0', #gamma
-            "\u0072:": '3.0', #r
-            "\u03BB": '0.5', #lambda
-            "\u03C3:": r'[0.4, 0.2, 0.1]', #sigma
+            "\u03B3:": '0.2', #gamma
+            "\u0072:": '0.1', #r
+            "\u03BB": '0.8', #lambda
+            "\u03C3:": r'[1, 0.2, 0.1]', #sigma
             "\u03C1:": r'[0.0, 0.5, 1.0]' #rho
         }
         self.entry_width = int(len(self.params_dict["\u03C3:"])/5*3.5)
         # print(self.entry_width)
         self.num_dict  = {
-            "range": "1.0",
+            "range": "10.0",
             "Number_of_points": "2000",
             "df0": "5",
             "Stop_criterion_for_F_ODE": "0.001",

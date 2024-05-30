@@ -270,11 +270,11 @@ class eqn_FfS(eqn_Ff):
         init_y  = np.ones((2,len(self.mS)))
         init_y[0] = np.power(self.mS,4/5)
         a = dt.datetime.now()
-        solution = solve_bvp(eqn_form, bc, self.mS, init_y)
+        self.solution_S = solve_bvp(eqn_form, bc, self.mS, init_y)
         b = dt.datetime.now() - a
         print('BVP for S is solved in',b.total_seconds(),'seconds.\n')
-        self.S = solution.sol(self.mS)[0]
-        self.dS = solution.sol(self.mS)[1]
+        self.S = self.solution_S.sol(self.mS)[0]
+        self.dS = self.solution_S.sol(self.mS)[1]
         opt_sig, opt_rho = self.optimal(self.mS)
         dis_cnt_coeff = 2/(opt_sig*opt_sig)
         self.ddS = (self.param[2] * self.S - self.param[1] * self.mS * self.dS)\
@@ -298,11 +298,11 @@ class eqn_FfS(eqn_Ff):
         init_y  = np.ones((2,len(self.mS)))
         init_y[0] = np.power(self.mS,4/5)
         a = dt.datetime.now()
-        solution = solve_bvp(eqn_form, bc, self.mS, init_y)
+        self.solution_T = solve_bvp(eqn_form, bc, self.mS, init_y)
         b = dt.datetime.now() - a
         print('BVP for T is solved in',b.total_seconds(),'seconds.\n')
-        self.T = solution.sol(self.mS)[0]
-        self.dT = solution.sol(self.mS)[1]
+        self.T = self.solution_T.sol(self.mS)[0]
+        self.dT = self.solution_T.sol(self.mS)[1]
         opt_sig , opt_rho = self.optimal(self.mS)
         dis_cnt_coeff = 2/(opt_sig*opt_sig)
         self.ddT = (-1 + self.param[2] * self.T - self.param[1] * self.mS * self.dT)\
@@ -324,11 +324,11 @@ class eqn_FfS(eqn_Ff):
         init_y  = np.ones((2,len(self.mS)))
         init_y[0] = np.power(self.mS,4/5)
         a = dt.datetime.now()
-        solution = solve_bvp(eqn_form, bc, self.mS, init_y)
+        self.solution_C = solve_bvp(eqn_form, bc, self.mS, init_y)
         b = dt.datetime.now() - a
         print('BVP for C is solved in',b.total_seconds(),'seconds.\n')
-        self.C = solution.sol(self.mS)[0]
-        self.dC = solution.sol(self.mS)[1]
+        self.C = self.solution_C.sol(self.mS)[0]
+        self.dC = self.solution_C.sol(self.mS)[1]
         opt_sig, opt_rho = self.optimal(self.mS) 
         dis_cnt_coeff = 2/(opt_sig*opt_sig)
         self.ddC = (- opt_rho + self.param[2] * self.C - self.param[1] * self.mS * self.dC)\
