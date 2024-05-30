@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt #version 3.2 consistancy fails on 3.5
 plt.rcParams.update({
     "text.usetex": True,
     # "font.family": "sans-serif",

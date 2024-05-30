@@ -1,9 +1,9 @@
 import json
 import munch
-import os
-import logging
-import ast
-import numpy as np
+# import os
+# import logging
+# import ast
+# import numpy as np
 
 import equations as eqn
 import PA_plot as pap
@@ -11,14 +11,14 @@ import gui
 
 from absl import app
 from absl import flags
-from absl import logging as absl_logging
+# from absl import logging as absl_logging
 
 # flags.DEFINE_string('config_path', '/Users/fahim/Desktop/Vijay_desktop/OOPA/configs/PA_configs.json',
 #                     """The path to load json file.""")
 # flags.DEFINE_string('config_path_', '/Users/fahim/Desktop/Vijay_desktop/OOPA/configs/PA_configs.json',
 #                     """The path to load json file.""")
 
-flags.DEFINE_string('config_path', "/Users/fahim/Documents/Vijay_desktop/OOPA_monit_cost/configs/",
+flags.DEFINE_string('config_path', "/Users/arashfahim/Documents/Corporate-Governance-and-Asset-Pricing/configs",
                     """The path to write json file.""")
 
 FLAGS = flags.FLAGS
@@ -44,31 +44,33 @@ def main(argv):
         PA_list.append(PA_tmp)
     
 
-    F = pap.myfigures(PA_list,'$F(w)$')
-    F.plot_iT()
+    # F = pap.myfigures(PA_list,'$F(w)$')
+    # F.plot_iT()
 
     f = pap.myfigures(PA_list,'$f(m)$')
     f.plot_iT()
+    
+    f.close_all()
 
-    S = pap.myfigures(PA_list,'$S(m)$')
-    S.plot_iT()
+    # S = pap.myfigures(PA_list,'$S(m)$')
+    # S.plot_iT()
 
-    T = pap.myfigures(PA_list,'$T(m)$')
-    T.plot_iT()   
+    # T = pap.myfigures(PA_list,'$T(m)$')
+    # T.plot_iT()   
 
-    C = pap.myfigures(PA_list,'$C(m)$')
-    C.plot_iT()
+    # C = pap.myfigures(PA_list,'$C(m)$')
+    # C.plot_iT()
 
-    C1 = pap.myfigures(PA_list,'$C(m)=\mu*T(m)-\lambda S(m)-f(m)$')
-    C1.plot_iT()   
+    # C1 = pap.myfigures(PA_list,'$C(m)=\mu*T(m)-\lambda S(m)-f(m)$')
+    # C1.plot_iT()   
 
-    CS = pap.myfigures(PA_list,'$C(m)+\lambda S(m)$')
-    CS.plot_iT() 
+    # CS = pap.myfigures(PA_list,'$C(m)+\lambda S(m)$')
+    # CS.plot_iT() 
 
-    lbS = pap.myfigures(PA_list,'$\lambda S(m)$')
-    lbS.plot_iT() 
+    # lbS = pap.myfigures(PA_list,'$\lambda S(m)$')
+    # lbS.plot_iT() 
 
-    lbS.close_all()
+    # lbS.close_all()
 
     # x = pap.plotF(PA_list)
     # x.plot_iT(' ')
