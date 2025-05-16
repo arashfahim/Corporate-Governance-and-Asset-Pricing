@@ -1,0 +1,13 @@
+cff-version: 0.0.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: "Fahim"
+    given-names: "Arash"
+    orcid: "https://orcid.org/0000-0001-8028-2471"
+  - family-names: "Gervais"
+    given-names: "Simon"
+  - family-names: "Krishna"
+    given-names: "Vijay R"
+title: "Corporate Governance and Asset Pricing"
+version: "0.0.0"
+url: "https://github.com/arashfahim/Corporate-Governance-and-Asset-Pricing"
