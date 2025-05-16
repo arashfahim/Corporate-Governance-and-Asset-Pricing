@@ -1,22 +1,20 @@
 {
  "Parameters": {
   "\u03bc:": 1.2,
-  "\u03b3:": 4.0,
-  "r:": 3.0,
-  "\u03bb": 0.5,
+  "\u03b3:": 0.2,
+  "r:": 0.1,
+  "\u03bb": 0.8,
   "\u03c3:": [
-   0.4,
-   0.2,
-   0.1
+   1,
+   0.2
   ],
   "\u03c1:": [
    0.0,
-   0.5,
-   1.0
+   0.25
   ]
  },
  "Numerical_settings": {
-  "range": 1.0,
+  "range": 10.0,
   "Number_of_points": 2000,
   "df0": 5,
   "Stop_criterion_for_F_ODE": 0.001,

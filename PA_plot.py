@@ -7,7 +7,7 @@ plt.rcParams.update({
     })
 import matplotlib.mlab as mlab
 import matplotlib.gridspec as gridspec
-import tikzplotlib
+# import tikzplotlib
 import os
 
 class myfigures(object):
@@ -61,7 +61,7 @@ str(round(obj.dy[0],4))
                     self.ax_dd.plot(self.obj[indx].x,self.obj[indx].ddy, label = self.lab[indx], color = color)
                 self.ax.legend(loc='upper center', \
     shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-                tikzplotlib.save(self.path+ "/valueFw.tex")
+                plt.savefig(self.path+ "/valueFw.png")
 
             if self.string == '$f(m)$':
                 string1 = '$f^{\prime}(m)$'
@@ -77,7 +77,7 @@ str(round(obj.dy[0],4))
                     self.ax_dd.plot(self.obj[indx].m,self.obj[indx].ddf, label = self.lab[indx], color = color)
                 self.ax.legend(loc='upper center', \
     shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-                tikzplotlib.save(self.path+"/valuefm.tex")
+                plt.savefig(self.path+"/valuefm.png")
 
             if self.string == '$S(m)$':
                 for indx, obj in enumerate(self.obj):
@@ -88,7 +88,7 @@ str(round(obj.dy[0],4))
                     self.ax_dd.plot(self.obj[indx].mS,self.obj[indx].ddS, label = self.lab[indx], color = color)
                 self.ax.legend(loc='upper center', \
     shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-                tikzplotlib.save(self.path+"/asset.tex")
+                plt.savefig(self.path+"/asset.png")
 
             if self.string == '$T(m)$':
                 for indx, obj in enumerate(self.obj):
@@ -99,7 +99,7 @@ str(round(obj.dy[0],4))
                     self.ax_dd.plot(self.obj[indx].mS,self.obj[indx].ddT, label = self.lab[indx], color = color)
                 self.ax.legend(loc='upper center', \
     shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-                tikzplotlib.save(self.path+"/survival.tex")
+                plt.savefig(self.path+"/survival.png")
             
             if self.string == '$C(m)$':                
                 for indx, obj in enumerate(self.obj):
@@ -110,7 +110,7 @@ str(round(obj.dy[0],4))
                     self.ax_dd.plot(self.obj[indx].mS,self.obj[indx].ddC, label = self.lab[indx], color = color)
                 self.ax.legend(loc='upper center', \
     shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-                tikzplotlib.save(self.path+"/cost.tex")
+                plt.savefig(self.path+"/cost.png")
 
             if self.string == '$C(m)=\mu*T(m)-\lambda S(m)-f(m)$': 
                 for indx, obj in enumerate(self.obj):
@@ -121,7 +121,7 @@ str(round(obj.dy[0],4))
                     self.ax_dd.plot(self.obj[indx].mS,self.obj[indx].ddC1, label = self.lab[indx], color = color)
                 self.ax.legend(loc='upper center', \
     shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-                tikzplotlib.save(self.path+"/cost1.tex")            
+                plt.savefig(self.path+"/cost1.png")            
 
             if self.string == '$C(m)+\lambda S(m)$': 
                 for indx, obj in enumerate(self.obj):
@@ -132,7 +132,7 @@ str(round(obj.dy[0],4))
                     self.ax_dd.plot(self.obj[indx].mS,self.obj[indx].ddC+self.obj[indx].param[3]*self.obj[indx].ddS, label = self.lab[indx], color = color)
                 self.ax.legend(loc='upper center', \
     shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-                tikzplotlib.save(self.path+"/cost_lambda_asset.tex")     
+                plt.savefig(self.path+"/cost_lambda_asset.png")     
 
             if self.string == '$\lambda S(m)$': 
                 for indx, obj in enumerate(self.obj):
@@ -143,7 +143,7 @@ str(round(obj.dy[0],4))
                     self.ax_dd.plot(self.obj[indx].mS,self.obj[indx].param[3]*self.obj[indx].ddS, label = self.lab[indx], color = color)
                 self.ax.legend(loc='upper center', \
     shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-                tikzplotlib.save(self.path+"/lambda_asset.tex")   
+                plt.savefig(self.path+"/lambda_asset.png")   
 
             plt.show(block=False)
             plt.pause(1)
@@ -254,7 +254,7 @@ str(round(obj.dy[0],4))
 #                 self.ax_ddF.plot(self.obj[indx].x,self.obj[indx].ddy, label = self.lab[indx], color = color)
 #             self.ax_F.legend(loc='upper center', \
 # shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-#             tikzplotlib.save(self.path+ "/valueF.tex")
+#             tikzplotlib.save(self.path+ "/valueF.png")
 
 #             for indx, obj in enumerate(self.obj):
 #                 plt.gca().set_prop_cycle(None)
@@ -264,7 +264,7 @@ str(round(obj.dy[0],4))
 #                 self.ax_ddf.plot(self.obj[indx].m,self.obj[indx].ddf, label = self.lab[indx], color = color)
 #             self.ax_f.legend(loc='upper center', \
 # shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-#             tikzplotlib.save(self.path+"/valuef.tex")
+#             tikzplotlib.save(self.path+"/valuef.png")
 
 #         if ('S' in string) | ('s' in string):
 #             for indx, obj in enumerate(self.obj):
@@ -275,7 +275,7 @@ str(round(obj.dy[0],4))
 #                 self.ax_ddS.plot(self.obj[indx].mS,self.obj[indx].ddS, label = self.lab[indx], color = color)
 #             self.ax_S.legend(loc='upper center', \
 # shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-#             tikzplotlib.save(self.path+"/asset.tex")
+#             tikzplotlib.save(self.path+"/asset.png")
 
 #             for indx, obj in enumerate(self.obj):
 #                 plt.gca().set_prop_cycle(None)
@@ -285,7 +285,7 @@ str(round(obj.dy[0],4))
 #                 self.ax_ddT.plot(self.obj[indx].mS,self.obj[indx].ddT, label = self.lab[indx], color = color)
 #             self.ax_T.legend(loc='upper center', \
 # shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-#             tikzplotlib.save(self.path+"/survival.tex")
+#             tikzplotlib.save(self.path+"/survival.png")
             
 #             for indx, obj in enumerate(self.obj):
 #                 plt.gca().set_prop_cycle(None)
@@ -295,7 +295,7 @@ str(round(obj.dy[0],4))
 #                 self.ax_ddC.plot(self.obj[indx].mS,self.obj[indx].ddC, label = self.lab[indx], color = color)
 #             self.ax_C.legend(loc='upper center', \
 # shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-#             tikzplotlib.save(self.path+"/cost.tex")
+#             tikzplotlib.save(self.path+"/cost.png")
 
 #             for indx, obj in enumerate(self.obj):
 #                 plt.gca().set_prop_cycle(None)
@@ -305,7 +305,7 @@ str(round(obj.dy[0],4))
 #                 self.ax_ddC1.plot(self.obj[indx].mS,self.obj[indx].ddC1, label = self.lab[indx], color = color)
 #             self.ax_C1.legend(loc='upper center', \
 # shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-#             tikzplotlib.save(self.path+"/cost12.tex")            
+#             tikzplotlib.save(self.path+"/cost12.png")            
 
 # #             f = self.obj.y; lab = '$m_p = $' +  \
 # # str(round(self.obj.m_p,4)) + '\n ' +  '$f^{\prime}(0) = $' + \

@@ -18,7 +18,7 @@ from absl import flags
 # flags.DEFINE_string('config_path_', '/Users/fahim/Desktop/Vijay_desktop/OOPA/configs/PA_configs.json',
 #                     """The path to load json file.""")
 
-flags.DEFINE_string('config_path', "/Users/arashfahim/Documents/Corporate-Governance-and-Asset-Pricing/configs",
+flags.DEFINE_string('config_path', "./configs",
                     """The path to write json file.""")
 
 FLAGS = flags.FLAGS
@@ -50,16 +50,18 @@ def main(argv):
     f = pap.myfigures(PA_list,'$f(m)$')
     f.plot_iT()
     
-    f.close_all()
+    # f.close_all()
 
-    # S = pap.myfigures(PA_list,'$S(m)$')
-    # S.plot_iT()
+    S = pap.myfigures(PA_list,'$S(m)$')
+    S.plot_iT()
 
-    # T = pap.myfigures(PA_list,'$T(m)$')
-    # T.plot_iT()   
+    T = pap.myfigures(PA_list,'$T(m)$')
+    T.plot_iT()   
 
-    # C = pap.myfigures(PA_list,'$C(m)$')
-    # C.plot_iT()
+    C = pap.myfigures(PA_list,'$C(m)$')
+    C.plot_iT()
+    
+    C.close_all()
 
     # C1 = pap.myfigures(PA_list,'$C(m)=\mu*T(m)-\lambda S(m)-f(m)$')
     # C1.plot_iT()   
