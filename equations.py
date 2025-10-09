@@ -50,7 +50,7 @@ class Equation(object):
         """Nonlinearity H: ddy = H(dy,y,x)"""
         raise NotImplementedError
 
-    def optimal_sigma(self,X,param):
+    def optimal(self,t):
         """Nonlinearity H: ddy = H(dy,y,x)"""
         raise NotImplementedError
 
@@ -134,12 +134,12 @@ class eqn_Ff(Equation):
         else:
             temp_swtch = [0]
             temp_swtch.extend(self.swtch)
-            temp_swtch.append(self.swtch[-1]+np.min(self.ddf)-1)
+            temp_swtch.append(self.swtch[-1]+np.min(self.ddf)-1) # the swit h cannot be less than the minimum of ddf
             for indexm, i in enumerate(t):
                 #solver of BVP: scipy.integrate.solve_bvp requires
                 #this to work for t of any size. This is the reason
                 #behind the loop.
-                i__ = self.findD(np.abs(i-self.m))#closest point on the frid to t
+                i__ = self.findD(np.abs(i-self.m))#closest point on the m-grid to t
                 y[indexm] = self.ddf[i__[0]]
                 z[indexm] = self.ddf[i__[0]]
             for index, g in enumerate(temp_swtch[0:-1]):
@@ -334,7 +334,7 @@ class eqn_FfS(eqn_Ff):
         dis_cnt_coeff = 2/(opt_sig*opt_sig)
         self.ddC = (- opt_rho + self.param[2] * self.C - self.param[1] * self.mS * self.dC)\
 *dis_cnt_coeff
-        for i in self.swtch_pos:#setting value at place of jumps avoids ploting jumps as a continuous function
+        for i in self.swtch_pos:#setting value at place of jumps avoids plotting jumps as a continuous function
             j = self.findD(np.abs(self.mS - self.mS[i]))
             self.ddC[j[0]] = np.nan
             self.ddC[j[0]+1] = np.nan
