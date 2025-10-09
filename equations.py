@@ -21,7 +21,7 @@ class Equation(object):
         """param=[mu, gamma, r ,lmb ,sgm, rho]"""
         self.param = list(config.Parameters.values())
         self.y_init = 0
-        self.Gamma = self.Gamma_order()
+        self.Gamma_order()
         """Parameters for the solver"""
         self.N = config.Numerical_settings.Number_of_points
         self.dx = self.range/self.N
@@ -78,32 +78,33 @@ class eqn_Ff(Equation):
     def Gamma_order(self):
         sgm_ = self.param[4]
         rho_ = self.param[5]
+        lmbd_ = self.param[3]
         self.param[0] = self.param[0] - rho_[0]
         rho_ = [r - rho_[0] for r in rho_]
-        Gamma = []
+        self.Gamma = []
         self.swtch = []
         _sgm_ = [sgm_[0]]
         _rho_ = [rho_[0]]
         for i in range(0,len(sgm_)):
             for j in range(1,len(sgm_)):
                 if i < j:
-                    gamma = 2*(rho_[i]-rho_[j])/(sgm_[i]*sgm_[i]-sgm_[j]*sgm_[j])
-                    val = -gamma*(sgm_[j]*sgm_[j])/2 + rho_[j]
+                    gamma = 2*(rho_[i]-rho_[j])/(lmbd_*lmbd_*(sgm_[i]*sgm_[i]-sgm_[j]*sgm_[j]))
+                    val = -gamma*(lmbd_*lmbd_*sgm_[j]*sgm_[j])/2 + rho_[j]
                     val_tmp = val
                     for k in range(0,len(sgm_)):
                         if k != i and k != j:
-                            val_tmp =  np.minimum(val_tmp,-gamma*(sgm_[k]*sgm_[k])/2 + rho_[k])
+                            val_tmp =  np.minimum(val_tmp,-gamma*(lmbd_*lmbd_*sgm_[k]*sgm_[k])/2 + rho_[k])
                     if val_tmp == val:
                         gamma_ = [gamma , i , j]
-                        Gamma.append(gamma_)
-        Gamma = sorted(Gamma, reverse =True)
+                        self.Gamma.append(gamma_)
+        self.Gamma = sorted(self.Gamma, reverse =True)
         # print('sgm = ',sgm_[0], '      AND rho = ', rho_[0])
         print('Switching values and active regimes:\n ')
-        for index, i in enumerate(Gamma):
-                _sgm_.append(sgm_[Gamma[index][2]])
-                _rho_.append(rho_[Gamma[index][2]])
-                self.swtch.append(Gamma[index][0])#holds the values of ddF where switching happends
-                print(Gamma[index][1], ' to ', Gamma[index][2], ' at Gamma_',index+1,' = ', round(Gamma[index][0],3),' \n')
+        for index, i in enumerate(self.Gamma):
+                _sgm_.append(sgm_[self.Gamma[index][2]])
+                _rho_.append(rho_[self.Gamma[index][2]])
+                self.swtch.append(self.Gamma[index][0])#holds the values of ddF where switching happends
+                print(self.Gamma[index][1], ' to ', self.Gamma[index][2], ' at Gamma_',index+1,' = ', round(self.Gamma[index][0],3),' \n')
         # _sgm_.reverse()
         self.param[4] = _sgm_
         self.param[5] = _rho_
