@@ -134,7 +134,7 @@ class eqn_Ff(Equation):
         else:
             temp_swtch = [0]
             temp_swtch.extend(self.swtch)
-            temp_swtch.append(self.swtch[-1]+np.min(self.ddf)-1) # the swit h cannot be less than the minimum of ddf
+            temp_swtch.append(self.swtch[-1]+np.min(self.ddf)-1) # the switch cannot happen at values of Gamma than the minimum of ddf
             for indexm, i in enumerate(t):
                 #solver of BVP: scipy.integrate.solve_bvp requires
                 #this to work for t of any size. This is the reason
