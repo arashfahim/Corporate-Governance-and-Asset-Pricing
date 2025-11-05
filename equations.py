@@ -180,7 +180,7 @@ class eqn_Ff(Equation):
         self.ddy = ddF
         self.__ddw__ = findMin(np.absolute(self.ddy))
         self.__w__ = findMin(np.absolute(self.y-self.line))
-        self.__dw__ = findMin(self.dy)
+        self.__dw__ = findMin(np.absolute(self.dy+1))
 
 
 
