@@ -79,8 +79,8 @@ class eqn_Ff(Equation):
         sgm_ = self.param[4]
         rho_ = self.param[5]
         lmbd_ = self.param[3]
-        self.param[0] = self.param[0] - rho_[0]
-        rho_ = [r - rho_[0] for r in rho_]
+        # self.param[0] = self.param[0] - rho_[0]
+        # rho_ = [r - rho_[0] for r in rho_]
         self.Gamma = []
         self.swtch = []
         _sgm_ = [sgm_[0]]
@@ -276,7 +276,7 @@ class eqn_FfS(eqn_Ff):
         print('BVP for S is solved in',b.total_seconds(),'seconds.\n')
         self.S = self.solution_S.sol(self.mS)[0]
         self.dS = self.solution_S.sol(self.mS)[1]
-        opt_sig, opt_rho = self.optimal(self.mS)
+        opt_sig, _ = self.optimal(self.mS)
         dis_cnt_coeff = 2/(opt_sig*opt_sig)
         self.ddS = (self.param[2] * self.S - self.param[1] * self.mS * self.dS)\
 *dis_cnt_coeff
@@ -289,7 +289,7 @@ class eqn_FfS(eqn_Ff):
 
     def bvp_T(self):
         def eqn_form(t, X):# defining equation for T
-            opt_sig, opt_rho = self.optimal(t)
+            opt_sig, _ = self.optimal(t)
             dis_cnt_coeff = 2/(opt_sig*opt_sig)
             H_ = np.vstack((X[1], dis_cnt_coeff*(-1 + self.param[2]*X[0] -self.param[1]*t * X[1])))
             return H_
@@ -304,7 +304,7 @@ class eqn_FfS(eqn_Ff):
         print('BVP for T is solved in',b.total_seconds(),'seconds.\n')
         self.T = self.solution_T.sol(self.mS)[0]
         self.dT = self.solution_T.sol(self.mS)[1]
-        opt_sig , opt_rho = self.optimal(self.mS)
+        opt_sig , _ = self.optimal(self.mS)
         dis_cnt_coeff = 2/(opt_sig*opt_sig)
         self.ddT = (-1 + self.param[2] * self.T - self.param[1] * self.mS * self.dT)\
 *dis_cnt_coeff
