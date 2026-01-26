@@ -79,7 +79,7 @@ class eqn_Ff(Equation):
         sgm_ = self.param[4]
         rho_ = self.param[5]
         lmbd_ = self.param[3]
-        # self.param[0] = self.param[0] - rho_[0]
+        self.param[0] = self.param[0] - rho_[0]
         # rho_ = [r - rho_[0] for r in rho_]
         self.Gamma = []
         self.swtch = []
