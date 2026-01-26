@@ -101,7 +101,7 @@ We use the package ```from scipy.integrate import solve_bvp``` to solve the ODEs
 
 These codes are checked with `Python 3.12.4`, `numpy 1.26.4`, `scipy 1.13.1`, `matplotlib 3.8.4`, 'json 2.0.9`, and `munch 2.5.0`.
 
-To run the file, you need to run ```main.py```. The location of the ```main.py``` must also include ```equation.py```, ``gui.py```, and ```PA_plot.py```. A UI window appears and you choose up to 6 sets of parameters. Then, you must click on the 'Save Parameters' and close the UI window. Then, the program runs to solve the problems and show verbose at each step of the solution. Finally, it plots the solutions. Note that the  ```PA_plot.myfigures``` allows for ploting many combined functions such as $\lambda S(m)$, or $C(m)+\lambda S(m)$. 
+To run the file, you need to run ```main.py```. The location of the ```main.py``` must also include ```equation.py```, ```gui.py```, and ```PA_plot.py```. A UI window appears and you choose up to 6 sets of parameters. Then, you must click on the 'Save Parameters' and close the UI window. Then, the program runs to solve the problems and show verbose at each step of the solution. Finally, it plots the solutions. Note that the  ```PA_plot.myfigures``` allows for ploting many combined functions such as $\lambda S(m)$, or $C(m)+\lambda S(m)$. 
 
 Package ```tikzplotlib``` ythat was used in the earlier versions are deprecated and the code yields png files. To plot in higher resolution in $\LaTeX$, you need to export the outputs in data files.
 
