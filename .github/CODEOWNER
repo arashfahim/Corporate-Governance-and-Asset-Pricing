@@ -1,0 +1,9 @@
+# All files — default owners
+* @arashfahim
+
+# Docs directory owned by an org team
+/docs/ @my-org/docs-team
+
+# All files under src/ (recursive) owned by you 
+/src/** @arashfahim
+
