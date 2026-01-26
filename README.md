@@ -101,4 +101,4 @@ We use the package ```from scipy.integrate import solve_bvp``` to solve the ODEs
 
 To run the file, you need to run main.py. A UI window appears and you choose up to 6 sets of parameters. Then, you must click on the 'Save Parameters' and close the UI window. Then, the program runs to solve the problems and show verbose at each step of the solution. Finally, it plots the solutions. Note that the  ```PA_plot.myfigures``` allows for ploting many combined functions such as $\lambda S(m)$, or $C(m)+\lambda S(m)$. 
 
-Finally, ```tikzplotlib``` yields tikz files that can be plotted in $\LaTeX$.
+Package ```tikzplotlib``` ythat was used in the earlier versions are depreciated. To plot in $\LaTeX$, you need to export the outputs in data files.
