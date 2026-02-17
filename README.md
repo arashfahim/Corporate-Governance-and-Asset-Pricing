@@ -99,9 +99,11 @@ We use the package ```from scipy.integrate import solve_bvp``` to solve the ODEs
 
 # How to run the program:
 
-These codes are checked with `Python 3.12.4`, `numpy 1.26.4`, `scipy 1.13.1`, `matplotlib 3.8.4`, `json 2.0.9`, and `munch 2.5.0`.
+These codes are checked with `Python 3.12.4`, `numpy 1.26.4`, `scipy 1.13.1`, `matplotlib 3.10`, `json 2.0.9`, and `munch 2.5.0`. 
 
-To run the file, you need to run ```main.py```. The location of the ```main.py``` must also include ```equation.py```, ```gui.py```, and ```PA_plot.py```. A UI window appears and you choose up to 6 sets of parameters. Then, you must click on the 'Save Parameters' and close the UI window. Then, the program runs to solve the problems and show verbose at each step of the solution. Finally, it plots the solutions. Note that the  ```PA_plot.myfigures``` allows for ploting many combined functions such as $\lambda S(m)$, or $C(m)+\lambda S(m)$. 
+To run the file, you need to run ```python main.py``` in a location which has a copy of```equation.py```, ```gui.py```, and ```PA_plot.py```. A UI window appears and you choose up to 6 sets of parameters. Then, you must click on the 'Save Parameters' to save your inserted parameters as a `json` file. To run the code, close the UI window. Then, the program runs to solve the problems and show verbose at each step of the solution. Finally, it plots the solutions using ```PA_plot.py```. Note that the  ```PA_plot.myfigures``` allows for ploting many combined functions such as $\lambda S(m)$, or $C(m)+\lambda S(m)$.
+
+If you do not need to plot the solutions, you exclude ```pap.myfigures``` in ```main.py```. The solutions to the boundary value problems are also written in the file ```output.dat```.
 
 Package ```tikzplotlib``` ythat was used in the earlier versions are deprecated and the code yields png files. To plot in higher resolution in $\LaTeX$, you need to export the outputs in data files.
 
