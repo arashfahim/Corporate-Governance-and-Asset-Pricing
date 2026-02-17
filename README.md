@@ -105,4 +105,14 @@ To run the file, you need to run ```python main.py``` in a location which has a 
 
 If you do not need to plot the solutions, you exclude ```pap.myfigures``` in ```main.py```. The solutions to the boundary value problems are also written in the file ```output.dat```. Package ```tikzplotlib``` that was used in the earlier versions are deprecated and the code yields png files. To plot in higher resolution in $\LaTeX$, you need to use ```output.dat```. The header of ```output.dat``` is the name of the variables `'x, F, dF, ddF, Fline, m, f, df, ddf, fline, S, T, C'` with each column showing the values.
 
+x = the range of independent variable
+F, dF, ddF = principal's value function and its derivatives
+Fline = $\tfrac{\mu\}{r}-\tfrac{\gamma}{r}x$ which intersects the solution at the free boundary $x_p$
+m = x/$\lambda$ financial slack
+f, df, ddf = value function of the principal and its derivatives as a function of financial slack.
+fline = $\tfrac{\mu\}{r}-\tfrac{\gamma\lambda}{r}m$ 
+S = asset price as a function of m
+T = credit default spread 
+C = monitoring cost
+
 
