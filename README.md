@@ -105,6 +105,6 @@ To run the file, you need to run ```python main.py``` in a location which has a 
 
 If you do not need to plot the solutions, you exclude ```pap.myfigures``` in ```main.py```. The solutions to the boundary value problems are also written in the file ```output.dat```.
 
-Package ```tikzplotlib``` ythat was used in the earlier versions are deprecated and the code yields png files. To plot in higher resolution in $\LaTeX$, you need to export the outputs in data files.
+Package ```tikzplotlib``` that was used in the earlier versions are deprecated and the code yields png files. To plot in higher resolution in $\LaTeX$, you need to use ```output.dat```.
 
 
