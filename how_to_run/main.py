@@ -44,8 +44,8 @@ def main(argv):
         PA_list.append(PA_tmp)
     
 
-    # F = pap.myfigures(PA_list,'$F(w)$')
-    # F.plot_iT()
+    F = pap.myfigures(PA_list,'$F(w)$')
+    F.plot_iT()
 
     f = pap.myfigures(PA_list,'$f(m)$')
     f.plot_iT()

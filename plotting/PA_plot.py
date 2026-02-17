@@ -1,3 +1,4 @@
+import numpy as np
 import matplotlib.pyplot as plt #version 3.2 consistancy fails on 3.5
 plt.rcParams.update({
     "text.usetex": True,
@@ -34,10 +35,10 @@ class myfigures(object):
             R = str(round(obj.param[2],4))
             lmb = str(round(obj.param[3],4))
             lab = 'Parameters: ' + r'$\mu = $' + mu + '\n' +\
-r'$\gamma = $' + gamma + ' $r = $' + R + '\n' + r'$ \lambda = $' + lmb + '\n' +\
-r'$\sigma = ($' + sgm + '$)$' + '\n' + r' ${\rho} = ($' + rho + '$)$' + '\n' +\
-'$w_p = $' +  str(round(obj.x_p,4)) + '\n' +\
-'$m_p = $' +  str(round(obj.m_p,4)) + '\n ' +  r' $F^{\prime}(0) = $' + \
+r'$\gamma = $' + gamma + r' $r = $' + R + '\n' + r'$ \lambda = $' + lmb + '\n' +\
+r'$\sigma = ($' + sgm + r'$)$' + '\n' + r' ${\rho} = ($' + rho + r'$)$' + '\n' +\
+r'$w_p = $' +  str(round(obj.x_p,4)) + '\n' +\
+r'$m_p = $' +  str(round(obj.m_p,4)) + '\n ' +  r' $F^{\prime}(0) = $' + \
 str(round(obj.dy[0],4))
             self.lab.append(lab)        
         
@@ -47,103 +48,128 @@ str(round(obj.dy[0],4))
         self.ax_dd = self.fig.add_subplot(self.spec[0, 2])
 
     def plot_iT(self):
+            colors = [color['color'] for color in list(plt.rcParams['axes.prop_cycle'])]
             if self.string == '$F(w)$':
-                string1 = '$F^{\prime}(w)$'
+                string1 = r'$F^{\prime}(w)$'
                 self.ax_d.set_title(string1)
-                string2 = '$F^{\prime\prime}(w)$'
+                string2 = r'$F^{\prime\prime}(w)$'
                 self.ax_dd.set_title(string2)
                 for indx, obj in enumerate(self.obj):
                     plt.gca().set_prop_cycle(None)
-                    color = next(self.ax._get_lines.prop_cycler)['color']
+                    color = colors[indx]#= next(self.ax._get_lines.prop_cycler)['color']
                     self.ax.plot(self.obj[indx].x,self.obj[indx].y, label = self.lab[indx], color = color)
                     self.ax.plot(self.obj[indx].x,self.obj[indx].line, 'k:')
                     self.ax_d.plot(self.obj[indx].x,self.obj[indx].dy, label = self.lab[indx], color = color)
                     self.ax_dd.plot(self.obj[indx].x,self.obj[indx].ddy, label = self.lab[indx], color = color)
                 self.ax.legend(loc='upper center', \
     shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-                plt.savefig(self.path+ "/valueFw.png")
+                # plt.savefig(self.path+ "/valueFw.png")
 
-            if self.string == '$f(m)$':
-                string1 = '$f^{\prime}(m)$'
+            if self.string == r'$f(m)$':
+                string1 = r'$f^{\prime}(m)$'
                 self.ax_d.set_title(string1)
-                string2 = '$f^{\prime\prime}(m)$'
+                string2 = r'$f^{\prime\prime}(m)$'
                 self.ax_dd.set_title(string2)
                 for indx, obj in enumerate(self.obj):
                     plt.gca().set_prop_cycle(None)
-                    color = next(self.ax._get_lines.prop_cycler)['color']
+                    color = colors[indx]#= next(self.ax._get_lines.prop_cycler)['color']
                     self.ax.plot(self.obj[indx].m,self.obj[indx].f, label = self.lab[indx], color = color)
                     self.ax.plot(self.obj[indx].m,self.obj[indx].fline, 'k:')
                     self.ax_d.plot(self.obj[indx].m,self.obj[indx].df, label = self.lab[indx], color = color)
                     self.ax_dd.plot(self.obj[indx].m,self.obj[indx].ddf, label = self.lab[indx], color = color)
                 self.ax.legend(loc='upper center', \
     shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-                plt.savefig(self.path+"/valuefm.png")
+                # plt.savefig(self.path+"/valuefm.png")
 
-            if self.string == '$S(m)$':
+            if self.string == r'$S(m)$':
+                string1 = r'$S^{\prime}(m)$'
+                self.ax_d.set_title(string1)
+                string2 = r'$S^{\prime\prime}(m)$'
+                self.ax_dd.set_title(string2)
                 for indx, obj in enumerate(self.obj):
                     plt.gca().set_prop_cycle(None)
-                    color = next(self.ax._get_lines.prop_cycler)['color']
+                    color = colors[indx]#= next(self.ax._get_lines.prop_cycler)['color']
                     self.ax.plot(self.obj[indx].mS,self.obj[indx].S, label = self.lab[indx], color = color)
                     self.ax_d.plot(self.obj[indx].mS,self.obj[indx].dS, label = self.lab[indx], color = color)
                     self.ax_dd.plot(self.obj[indx].mS,self.obj[indx].ddS, label = self.lab[indx], color = color)
                 self.ax.legend(loc='upper center', \
     shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-                plt.savefig(self.path+"/asset.png")
+                # plt.savefig(self.path+"/asset.png")
 
-            if self.string == '$T(m)$':
+            if self.string == r'$T(m)$':
+                string1 = r'$T^{\prime}(m)$'
+                self.ax_d.set_title(string1)
+                string2 = r'$T^{\prime\prime}(m)$'
+                self.ax_dd.set_title(string2)
                 for indx, obj in enumerate(self.obj):
                     plt.gca().set_prop_cycle(None)
-                    color = next(self.ax._get_lines.prop_cycler)['color']
+                    color = colors[indx]#= next(self.ax._get_lines.prop_cycler)['color']
                     self.ax.plot(self.obj[indx].mS,self.obj[indx].T, label = self.lab[indx], color = color)
                     self.ax_d.plot(self.obj[indx].mS,self.obj[indx].dT, label = self.lab[indx], color = color)
                     self.ax_dd.plot(self.obj[indx].mS,self.obj[indx].ddT, label = self.lab[indx], color = color)
                 self.ax.legend(loc='upper center', \
     shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-                plt.savefig(self.path+"/survival.png")
+                # plt.savefig(self.path+"/survival.png")
             
-            if self.string == '$C(m)$':                
+            if self.string == r'$C(m)$': 
+                string1 = r'$C^{\prime}(m)$'
+                self.ax_d.set_title(string1)
+                string2 = r'$C^{\prime\prime}(m)$'
+                self.ax_dd.set_title(string2)               
                 for indx, obj in enumerate(self.obj):
                     plt.gca().set_prop_cycle(None)
-                    color = next(self.ax._get_lines.prop_cycler)['color']
+                    color = colors[indx]#= next(self.ax._get_lines.prop_cycler)['color']
                     self.ax.plot(self.obj[indx].mS,self.obj[indx].C, label = self.lab[indx], color = color)
                     self.ax_d.plot(self.obj[indx].mS,self.obj[indx].dC, label = self.lab[indx], color = color)
                     self.ax_dd.plot(self.obj[indx].mS,self.obj[indx].ddC, label = self.lab[indx], color = color)
                 self.ax.legend(loc='upper center', \
     shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-                plt.savefig(self.path+"/cost.png")
+                # plt.savefig(self.path+"/cost.png")
 
-            if self.string == '$C(m)=\mu*T(m)-\lambda S(m)-f(m)$': 
+            if self.string == r'$C(m)=\mu T(m)-\lambda S(m)-f(m)$': 
+                string1 = r'$C^{\prime}(m)$'
+                self.ax_d.set_title(string1)
+                string2 = r'$C^{\prime\prime}(m)$'
+                self.ax_dd.set_title(string2)
                 for indx, obj in enumerate(self.obj):
                     plt.gca().set_prop_cycle(None)
-                    color = next(self.ax._get_lines.prop_cycler)['color']
+                    color = colors[indx]#= next(self.ax._get_lines.prop_cycler)['color']
                     self.ax.plot(self.obj[indx].mS,self.obj[indx].C1, label = self.lab[indx], color = color)
                     self.ax_d.plot(self.obj[indx].mS,self.obj[indx].dC1, label = self.lab[indx], color = color)
                     self.ax_dd.plot(self.obj[indx].mS,self.obj[indx].ddC1, label = self.lab[indx], color = color)
                 self.ax.legend(loc='upper center', \
     shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-                plt.savefig(self.path+"/cost1.png")            
+                # plt.savefig(self.path+"/cost1.png")            
 
-            if self.string == '$C(m)+\lambda S(m)$': 
+            if self.string == r'$C(m)+\lambda S(m)$': 
+                string1 = r'$C^{\prime}(m)+\lambda S^{\prime}(m)$'
+                self.ax_d.set_title(string1)
+                string2 = r'$C^{\prime\prime}(m)+\lambda S^{\prime\prime}(m)$'
+                self.ax_dd.set_title(string2)
                 for indx, obj in enumerate(self.obj):
                     plt.gca().set_prop_cycle(None)
-                    color = next(self.ax._get_lines.prop_cycler)['color']
+                    color = colors[indx]#= next(self.ax._get_lines.prop_cycler)['color']
                     self.ax.plot(self.obj[indx].mS,self.obj[indx].C+self.obj[indx].param[3]*self.obj[indx].S, label = self.lab[indx], color = color)
                     self.ax_d.plot(self.obj[indx].mS,self.obj[indx].dC+self.obj[indx].param[3]*self.obj[indx].dS, label = self.lab[indx], color = color)
                     self.ax_dd.plot(self.obj[indx].mS,self.obj[indx].ddC+self.obj[indx].param[3]*self.obj[indx].ddS, label = self.lab[indx], color = color)
                 self.ax.legend(loc='upper center', \
     shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-                plt.savefig(self.path+"/cost_lambda_asset.png")     
+                # plt.savefig(self.path+"/cost_lambda_asset.png")     
 
-            if self.string == '$\lambda S(m)$': 
+            if self.string == r'$\lambda S(m)$': 
+                string1 = r'$\lambda S^{\prime}(m)$'    
+                self.ax_d.set_title(string1)
+                string2 = r'$\lambda S^{\prime\prime}(m)$'
+                self.ax_dd.set_title(string2)
                 for indx, obj in enumerate(self.obj):
                     plt.gca().set_prop_cycle(None)
-                    color = next(self.ax._get_lines.prop_cycler)['color']
+                    color = colors[indx]#= next(self.ax._get_lines.prop_cycler)['color']
                     self.ax.plot(self.obj[indx].mS,self.obj[indx].param[3]*self.obj[indx].S, label = self.lab[indx], color = color)
                     self.ax_d.plot(self.obj[indx].mS,self.obj[indx].param[3]*self.obj[indx].dS, label = self.lab[indx], color = color)
                     self.ax_dd.plot(self.obj[indx].mS,self.obj[indx].param[3]*self.obj[indx].ddS, label = self.lab[indx], color = color)
                 self.ax.legend(loc='upper center', \
     shadow = True, ncol = 1, bbox_to_anchor=(1.5, 0.7))
-                plt.savefig(self.path+"/lambda_asset.png")   
+                # plt.savefig(self.path+"/lambda_asset.png")   
 
             plt.show(block=False)
             plt.pause(1)
