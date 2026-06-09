@@ -146,7 +146,7 @@ class eqn_Ff(Equation):
             for index, g in enumerate(temp_swtch[0:-1]):
                 y = np.where((y <= g) & (y > temp_swtch[index+1]), sgm_[index], y)
                 z = np.where((z <= g) & (z > temp_swtch[index+1]), rho_[index], z)
-        return lmbd_*y,z
+        return y,z
     
 
     def bvp_solve(self):
@@ -248,6 +248,13 @@ Minimum of abs(F-(mu-gamma*x)/r,  Minimum of abs(dF+1), and Minimum of abs(ddF) 
 +str(round(self.m_p,5))+'. ' + '\n'\
 +swtch_+'.'
 
+        ts = dt.datetime.now().strftime('%Y%m%d_%H%M%S')
+        np.savetxt(f'x_y_dy_ddy_{ts}.dat',
+                   np.column_stack([self.x, self.y, self.dy, self.ddy]),
+                   header='x y dy ddy', comments='')
+        np.savetxt(f'm_f_df_ddf_{ts}.dat',
+                   np.column_stack([self.m, self.f, self.df, self.ddf]),
+                   header='m f df ddf', comments='')
         self.solver_tag = False
         ####################
 
@@ -285,6 +292,7 @@ class eqn_FfS(eqn_Ff):
             j = self.findD(np.abs(self.mS - self.mS[i]))
             self.ddS[j[0]] = np.nan
             self.ddS[j[0]+1] = np.nan
+        np.savetxt(f'S_{dt.datetime.now().strftime("%Y%m%d_%H%M%S")}.dat', np.column_stack([self.mS, self.S, self.dS, self.ddS]), header='m S dS ddS', comments='')
 
 
 
@@ -313,6 +321,7 @@ class eqn_FfS(eqn_Ff):
             j = self.findD(np.abs(self.mS - self.mS[i]))
             self.ddT[j[0]] = np.nan
             self.ddT[j[0]+1] = np.nan
+        np.savetxt(f'T_{dt.datetime.now().strftime("%Y%m%d_%H%M%S")}.dat', np.column_stack([self.mS, self.T, self.dT, self.ddT]), header='m T dT ddT', comments='')
 
     def bvp_C(self):
         def eqn_form(t, X):# defining equation for T
@@ -331,7 +340,7 @@ class eqn_FfS(eqn_Ff):
         print('BVP for C is solved in',b.total_seconds(),'seconds.\n')
         self.C = self.solution_C.sol(self.mS)[0]
         self.dC = self.solution_C.sol(self.mS)[1]
-        opt_sig, opt_rho = self.optimal(self.mS) 
+        opt_sig, opt_rho = self.optimal(self.mS)
         dis_cnt_coeff = 2/(opt_sig*opt_sig)
         self.ddC = (- opt_rho + self.param[2] * self.C - self.param[1] * self.mS * self.dC)\
 *dis_cnt_coeff
@@ -339,6 +348,7 @@ class eqn_FfS(eqn_Ff):
             j = self.findD(np.abs(self.mS - self.mS[i]))
             self.ddC[j[0]] = np.nan
             self.ddC[j[0]+1] = np.nan
+        np.savetxt(f'C_{dt.datetime.now().strftime("%Y%m%d_%H%M%S")}.dat', np.column_stack([self.mS, self.C, self.dC, self.ddC]), header='m C dC ddC', comments='')
 
     def bvp(self):# solves both equations for T and S
         if self.solver_tag:#if bvp solved tag is false
