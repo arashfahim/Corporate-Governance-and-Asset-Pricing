@@ -50,7 +50,7 @@ class Equation(object):
         """Nonlinearity H: ddy = H(dy,y,x)"""
         raise NotImplementedError
 
-    def optimal(self,t):
+    def optimal(self,X,param):
         """Nonlinearity H: ddy = H(dy,y,x)"""
         raise NotImplementedError
 
@@ -80,7 +80,7 @@ class eqn_Ff(Equation):
         rho_ = self.param[5]
         lmbd_ = self.param[3]
         self.param[0] = self.param[0] - rho_[0]
-        # rho_ = [r - rho_[0] for r in rho_]
+        rho_ = [r - rho_[0] for r in rho_]
         self.Gamma = []
         self.swtch = []
         _sgm_ = [sgm_[0]]
@@ -124,6 +124,7 @@ class eqn_Ff(Equation):
 
 
     def optimal(self,t):#def optimal_sigma_rho(self,t):
+        lmbd_ = self.param[3]
         sgm_ = self.param[4]
         rho_ = self.param[5]
         y = np.ones(len(t))
@@ -134,12 +135,12 @@ class eqn_Ff(Equation):
         else:
             temp_swtch = [0]
             temp_swtch.extend(self.swtch)
-            temp_swtch.append(self.swtch[-1]+np.min(self.ddf)-1) # the switch cannot happen at values of Gamma than the minimum of ddf
+            temp_swtch.append(self.swtch[-1]+np.min(self.ddf)-1)
             for indexm, i in enumerate(t):
                 #solver of BVP: scipy.integrate.solve_bvp requires
                 #this to work for t of any size. This is the reason
                 #behind the loop.
-                i__ = self.findD(np.abs(i-self.m))#closest point on the m-grid to t
+                i__ = self.findD(np.abs(i-self.m))#closest point on the grid to t
                 y[indexm] = self.ddf[i__[0]]
                 z[indexm] = self.ddf[i__[0]]
             for index, g in enumerate(temp_swtch[0:-1]):
@@ -180,7 +181,7 @@ class eqn_Ff(Equation):
         self.ddy = ddF
         self.__ddw__ = findMin(np.absolute(self.ddy))
         self.__w__ = findMin(np.absolute(self.y-self.line))
-        self.__dw__ = findMin(np.absolute(self.dy+1))
+        self.__dw__ = findMin(self.dy)
 
 
 
@@ -247,6 +248,13 @@ Minimum of abs(F-(mu-gamma*x)/r,  Minimum of abs(dF+1), and Minimum of abs(ddF) 
 +str(round(self.m_p,5))+'. ' + '\n'\
 +swtch_+'.'
 
+        ts = dt.datetime.now().strftime('%Y%m%d_%H%M%S')
+        np.savetxt(f'x_y_dy_ddy_{ts}.dat',
+                   np.column_stack([self.x, self.y, self.dy, self.ddy]),
+                   header='x y dy ddy', comments='')
+        np.savetxt(f'm_f_df_ddf_{ts}.dat',
+                   np.column_stack([self.m, self.f, self.df, self.ddf]),
+                   header='m f df ddf', comments='')
         self.solver_tag = False
         ####################
 
@@ -276,7 +284,7 @@ class eqn_FfS(eqn_Ff):
         print('BVP for S is solved in',b.total_seconds(),'seconds.\n')
         self.S = self.solution_S.sol(self.mS)[0]
         self.dS = self.solution_S.sol(self.mS)[1]
-        opt_sig, _ = self.optimal(self.mS)
+        opt_sig, opt_rho = self.optimal(self.mS)
         dis_cnt_coeff = 2/(opt_sig*opt_sig)
         self.ddS = (self.param[2] * self.S - self.param[1] * self.mS * self.dS)\
 *dis_cnt_coeff
@@ -284,12 +292,13 @@ class eqn_FfS(eqn_Ff):
             j = self.findD(np.abs(self.mS - self.mS[i]))
             self.ddS[j[0]] = np.nan
             self.ddS[j[0]+1] = np.nan
+        np.savetxt(f'S_{dt.datetime.now().strftime("%Y%m%d_%H%M%S")}.dat', np.column_stack([self.mS, self.S, self.dS, self.ddS]), header='m S dS ddS', comments='')
 
 
 
     def bvp_T(self):
         def eqn_form(t, X):# defining equation for T
-            opt_sig, _ = self.optimal(t)
+            opt_sig, opt_rho = self.optimal(t)
             dis_cnt_coeff = 2/(opt_sig*opt_sig)
             H_ = np.vstack((X[1], dis_cnt_coeff*(-1 + self.param[2]*X[0] -self.param[1]*t * X[1])))
             return H_
@@ -304,7 +313,7 @@ class eqn_FfS(eqn_Ff):
         print('BVP for T is solved in',b.total_seconds(),'seconds.\n')
         self.T = self.solution_T.sol(self.mS)[0]
         self.dT = self.solution_T.sol(self.mS)[1]
-        opt_sig , _ = self.optimal(self.mS)
+        opt_sig , opt_rho = self.optimal(self.mS)
         dis_cnt_coeff = 2/(opt_sig*opt_sig)
         self.ddT = (-1 + self.param[2] * self.T - self.param[1] * self.mS * self.dT)\
 *dis_cnt_coeff
@@ -312,6 +321,7 @@ class eqn_FfS(eqn_Ff):
             j = self.findD(np.abs(self.mS - self.mS[i]))
             self.ddT[j[0]] = np.nan
             self.ddT[j[0]+1] = np.nan
+        np.savetxt(f'T_{dt.datetime.now().strftime("%Y%m%d_%H%M%S")}.dat', np.column_stack([self.mS, self.T, self.dT, self.ddT]), header='m T dT ddT', comments='')
 
     def bvp_C(self):
         def eqn_form(t, X):# defining equation for T
@@ -330,14 +340,15 @@ class eqn_FfS(eqn_Ff):
         print('BVP for C is solved in',b.total_seconds(),'seconds.\n')
         self.C = self.solution_C.sol(self.mS)[0]
         self.dC = self.solution_C.sol(self.mS)[1]
-        opt_sig, opt_rho = self.optimal(self.mS) 
+        opt_sig, opt_rho = self.optimal(self.mS)
         dis_cnt_coeff = 2/(opt_sig*opt_sig)
         self.ddC = (- opt_rho + self.param[2] * self.C - self.param[1] * self.mS * self.dC)\
 *dis_cnt_coeff
-        for i in self.swtch_pos:#setting value at place of jumps avoids plotting jumps as a continuous function
+        for i in self.swtch_pos:#setting value at place of jumps avoids ploting jumps as a continuous function
             j = self.findD(np.abs(self.mS - self.mS[i]))
             self.ddC[j[0]] = np.nan
             self.ddC[j[0]+1] = np.nan
+        np.savetxt(f'C_{dt.datetime.now().strftime("%Y%m%d_%H%M%S")}.dat', np.column_stack([self.mS, self.C, self.dC, self.ddC]), header='m C dC ddC', comments='')
 
     def bvp(self):# solves both equations for T and S
         if self.solver_tag:#if bvp solved tag is false
